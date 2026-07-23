@@ -51,7 +51,7 @@ class AuthService extends BaseService implements AuthServiceInterface
             'email' => $data->email,
             'password' => $data->password,
         ])) {
-            throw new AuthenticationException('Invalid email or password.');
+           throw new \App\Exceptions\InvalidCredentialsException();
         }
 
         /** @var User $user */
