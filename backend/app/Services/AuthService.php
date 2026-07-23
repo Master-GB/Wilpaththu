@@ -22,10 +22,7 @@ class AuthService extends BaseService implements AuthServiceInterface
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
-            'user' => $user,
-            'token' => $token,
-        ];
+       return compact('user','token');
     }
 
     public function login(LoginRequest $request)
@@ -38,10 +35,7 @@ class AuthService extends BaseService implements AuthServiceInterface
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
-            'user' => $user,
-            'token' => $token,
-        ];
+       return compact('user','token');
     }
 
     public function logout()

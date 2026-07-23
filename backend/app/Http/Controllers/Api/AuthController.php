@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Services\AuthServiceInterface;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 
-class AuthController extends Controller
+class AuthController extends BaseApiController
 {
     public function __construct(
         private readonly AuthServiceInterface $authService
@@ -16,16 +17,28 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        return response()->json(
-            $this->authService->register($request),
+        $result = $this->authService->register($request);
+
+        return $this->success(
+            [
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
+            ],
+            'User registered successfully.',
             201
         );
     }
 
     public function login(LoginRequest $request): JsonResponse
     {
-        return response()->json(
-            $this->authService->login($request)
+        $result = $this->authService->login($request);
+
+        return $this->success(
+            [
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
+            ],
+            'Login successful.'
         );
     }
 
@@ -33,15 +46,18 @@ class AuthController extends Controller
     {
         $this->authService->logout();
 
-        return response()->json([
-            'message' => 'Logout successful.'
-        ]);
+        return $this->success(
+            null,
+            'Logout successful.'
+        );
     }
 
     public function user(): JsonResponse
     {
-        return response()->json(
-            $this->authService->user()
+        return $this->success(
+            new UserResource(
+                $this->authService->user()
+            )
         );
     }
 }
