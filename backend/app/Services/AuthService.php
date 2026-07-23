@@ -31,7 +31,7 @@ class AuthService extends BaseService implements AuthServiceInterface
     public function login(LoginRequest $request)
     {
         if (! Auth::attempt($request->validated())) {
-            throw new \Exception('Invalid credentials.');
+            abort(401, 'Invalid email or password.');
         }
 
         $user = Auth::user();
