@@ -2,16 +2,16 @@
 
 namespace App\Contracts\Services;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\DTOs\AuthResultData;
+use App\DTOs\LoginData;
+use App\DTOs\RegisterData;
+use App\Models\User;
 
 interface AuthServiceInterface
 {
-    public function register(RegisterRequest $request);
+    public function register(RegisterData $data): AuthResultData;
 
-    public function login(LoginRequest $request);
+    public function login(LoginData $data): AuthResultData;
 
-    public function logout();
-
-    public function user();
+    public function logout(User $user): void;
 }

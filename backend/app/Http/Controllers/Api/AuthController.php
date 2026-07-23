@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Services\AuthServiceInterface;
+use App\DTOs\LoginData;
+use App\DTOs\RegisterData;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AuthController extends BaseApiController
 {
@@ -17,12 +20,14 @@ class AuthController extends BaseApiController
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        $result = $this->authService->register($request);
+        $result = $this->authService->register(
+            RegisterData::fromRequest($request)
+        );
 
         return $this->success(
             [
-                'user' => new UserResource($result['user']),
-                'token' => $result['token'],
+                'user' => new UserResource($result->user),
+                'token' => $result->token,
             ],
             'User registered successfully.',
             201
@@ -31,20 +36,22 @@ class AuthController extends BaseApiController
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $result = $this->authService->login($request);
+        $result = $this->authService->login(
+            LoginData::fromRequest($request)
+        );
 
         return $this->success(
             [
-                'user' => new UserResource($result['user']),
-                'token' => $result['token'],
+                'user' => new UserResource($result->user),
+                'token' => $result->token,
             ],
             'Login successful.'
         );
     }
 
-    public function logout(): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
-        $this->authService->logout();
+        $this->authService->logout($request->user());
 
         return $this->success(
             null,
@@ -52,12 +59,11 @@ class AuthController extends BaseApiController
         );
     }
 
-    public function user(): JsonResponse
+    public function user(Request $request): JsonResponse
     {
         return $this->success(
-            new UserResource(
-                $this->authService->user()
-            )
+            new UserResource($request->user()),
+            'Authenticated user retrieved successfully.'
         );
     }
 }
