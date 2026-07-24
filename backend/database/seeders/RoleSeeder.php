@@ -13,9 +13,11 @@ class RoleSeeder extends Seeder
             'Admin',
             'Tourist',
             'Hotel Owner',
+            'Jeep Owner',
             'Jeep Driver',
+            'Transport Owner',
+            'Transport driver',
             'Tour Guide',
-            'Transport Provider',
         ];
 
         foreach ($roles as $role) {

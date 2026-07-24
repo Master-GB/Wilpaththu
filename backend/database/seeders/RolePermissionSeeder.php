@@ -4,72 +4,76 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = Role::findByName('Admin');
 
-        $admin->givePermissionTo([
-            'hotel.create',
-            'hotel.view',
-            'hotel.update',
-            'hotel.delete',
+     // Reset cached roles and permissions
+        app()[\Spatie\Permission\PermissionRegistrar::class]
+            ->forgetCachedPermissions();
 
-            'jeep.create',
-            'jeep.view',
-            'jeep.update',
-            'jeep.delete',
+    Role::findByName('Admin')->syncPermissions(
+    Permission::pluck('name')->toArray()
+);
 
-            'guide.create',
-            'guide.view',
-            'guide.update',
-            'guide.delete',
+        Role::findByName('Hotel Owner')->syncPermissions([
+            'business.create',
+            'business.view',
+            'business.update',
+            'business.delete',
 
-            'transport.create',
-            'transport.view',
-            'transport.update',
-            'transport.delete',
-
-            'booking.create',
-            'booking.view',
-            'booking.update',
-            'booking.cancel',
-
-            'user.manage',
-            'role.manage',
-        ]);
-
-        Role::findByName('Hotel Owner')->givePermissionTo([
             'hotel.create',
             'hotel.view',
             'hotel.update',
             'hotel.delete',
         ]);
 
-        Role::findByName('Jeep Driver')->givePermissionTo([
+        Role::findByName('Jeep Owner')->syncPermissions([
+
+            'business.create',
+            'business.view',
+            'business.update',
+            'business.delete',
+
             'jeep.create',
             'jeep.view',
             'jeep.update',
             'jeep.delete',
+            'jeep.assign-driver',
         ]);
 
-        Role::findByName('Tour Guide')->givePermissionTo([
+        Role::findByName('Jeep Driver')->syncPermissions([
+            'jeep.view',
+        ]);
+
+        Role::findByName('Transport Owner')->syncPermissions([
+            'business.create',
+            'business.view',
+            'business.update',
+            'business.delete',
+
+            'vehicle.create',
+            'vehicle.view',
+            'vehicle.update',
+            'vehicle.delete',
+            'vehicle.assign-driver',
+        ]);
+
+        Role::findByName('Tour Guide')->syncPermissions([
             'guide.create',
             'guide.view',
             'guide.update',
             'guide.delete',
         ]);
 
-        Role::findByName('Transport Provider')->givePermissionTo([
-            'transport.create',
-            'transport.view',
-            'transport.update',
-            'transport.delete',
+        Role::findByName('Transport Driver')->syncPermissions([
+            'vehicle.view',
         ]);
 
-        Role::findByName('Tourist')->givePermissionTo([
+        Role::findByName('Tourist')->syncPermissions([
             'booking.create',
             'booking.view',
             'booking.cancel',
