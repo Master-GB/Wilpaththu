@@ -2,69 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Permission;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
 class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $permissions = [
+        foreach (Permission::cases() as $permission) {
 
-            //Buisness
-            'business.create',
-            'business.view',
-            'business.update',
-            'business.delete',
-            'business.verify',
-
-
-            // Hotel
-            'hotel.create',
-            'hotel.view',
-            'hotel.update',
-            'hotel.delete',
-            'hotel.verify',
-
-            // Jeep
-            'jeep.create',
-            'jeep.view',
-            'jeep.update',
-            'jeep.delete',
-            'jeep.assign-driver',
-
-            // Guide
-            'guide.create',
-            'guide.view',
-            'guide.update',
-            'guide.delete',
-            'guide.verify',
-
-            // Transport
-            'vehicle.create',
-            'vehicle.view',
-            'vehicle.update',
-            'vehicle.delete',
-            'vehicle.assign-driver',
-
-            // Booking
-            'booking.create',
-            'booking.view',
-            'booking.update',
-            'booking.cancel',
-            //'booking.approve',
-            //'booking.reject',
-
-            // Admin
-            'user.manage',
-            'role.manage',
-            'permission.manage',
-        ];
-
-        foreach ($permissions as $permission) {
-
-            Permission::firstOrCreate([
-                'name' => $permission,
+            SpatiePermission::firstOrCreate([
+                'name' => $permission->value,
                 'guard_name' => 'web',
             ]);
 
