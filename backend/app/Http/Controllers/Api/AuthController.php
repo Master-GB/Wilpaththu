@@ -20,9 +20,9 @@ class AuthController extends BaseApiController
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        $result = $this->authService->register(
-            RegisterData::fromRequest($request)
-        );
+        $data = RegisterData::fromRequest($request);
+
+        $result = $this->authService->register($data);
 
         return $this->success(
             [
