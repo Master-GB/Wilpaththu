@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Enums\BusinessType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\BusinessType;
+use Illuminate\Database\Eloquent\Model;
 
 class Business extends Model
 {
@@ -12,34 +12,27 @@ class Business extends Model
 
     protected $fillable = [
         'owner_id',
-        'type',
-        'name',
+        'business_name',
         'description',
-        'phone',
+        'registration_number',
+        'business_type',
+        'contact_number',
         'email',
         'address',
-        'latitude',
-        'longitude',
-        'logo',
         'is_verified',
+        'verified_at',
         'is_active',
     ];
 
     protected $casts = [
+        'business_type' => BusinessType::class,
         'is_verified' => 'boolean',
+        'verified_at' => 'datetime',
         'is_active' => 'boolean',
-        'latitude' => 'float',
-        'longitude' => 'float',
-        'type' => BusinessType::class,
     ];
 
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
-    }
-
-    public function jeeps()
-    {
-       // return $this->hasMany(Jeep::class);
     }
 }
