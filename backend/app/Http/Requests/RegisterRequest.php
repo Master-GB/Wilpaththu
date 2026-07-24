@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\Role;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -12,7 +14,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -20,10 +22,27 @@ class RegisterRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            //
-        ];
-    }
+  public function rules(): array
+{
+    return [
+
+        'name' => ['required', 'string', 'max:255'],
+
+        'email' => ['required', 'email', 'unique:users,email'],
+
+        'password' => ['required', 'confirmed', 'min:8'],
+
+        'role' => [
+            'required',
+            Rule::in([
+                Role::TOURIST->value,
+                Role::HOTEL_OWNER->value,
+                Role::JEEP_OWNER->value,
+                Role::TRANSPORT_OWNER->value,
+                Role::TOUR_GUIDE->value,
+            ]),
+        ],
+
+    ];
+}
 }
