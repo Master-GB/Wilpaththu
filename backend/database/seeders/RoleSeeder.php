@@ -2,27 +2,21 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        $roles = [
-            'Admin',
-            'Tourist',
-            'Hotel Owner',
-            'Jeep Driver',
-            'Tour Guide',
-            'Transport Provider',
-        ];
+        foreach (Role::cases() as $role) {
 
-        foreach ($roles as $role) {
-            Role::firstOrCreate([
-                'name' => $role,
+            SpatieRole::firstOrCreate([
+                'name' => $role->value,
                 'guard_name' => 'web',
             ]);
+
         }
     }
 }

@@ -23,24 +23,18 @@ class AuthService extends BaseService implements AuthServiceInterface
      * Register a new user.
      */
     public function register(RegisterData $data): AuthResultData
-    {
-        $user = $this->users->create([
-            'name' => $data->name,
-            'email' => $data->email,
-            'password' => bcrypt($data->password),
-        ]);
+{
+    $user = $this->users->create($data->toArray());
 
-        // Assign default role
-        $user->assignRole('Tourist');
+    $user->assignRole($data->role);
 
-        // Generate Sanctum token
-        $token = $user->createToken('auth_token')->plainTextToken;
+    $token = $user->createToken('auth_token')->plainTextToken;
 
-        return new AuthResultData(
-            user: $user,
-            token: $token
-        );
-    }
+    return new AuthResultData(
+        user: $user,
+        token: $token,
+    );
+}
 
     /**
      * Login existing user.
