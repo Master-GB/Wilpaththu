@@ -29,4 +29,8 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(Role::TOUR_GUIDE->value);
         });
     }
+
+    protected $policies = [
+    \App\Models\Business::class => \App\Policies\BusinessPolicy::class,
+];
 }

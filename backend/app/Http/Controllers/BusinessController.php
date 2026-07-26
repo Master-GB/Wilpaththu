@@ -2,64 +2,111 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Services\BusinessServiceInterface;
+use App\DTOs\BusinessData;
+use App\Http\Controllers\Api\BaseApiController;
+use App\Http\Requests\StoreBusinessRequest;
+use App\Http\Requests\UpdateBusinessRequest;
+use App\Http\Resources\BusinessResource;
 use App\Models\Business;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class BusinessController extends Controller
+class BusinessController extends BaseApiController
 {
+    public function __construct(
+        private readonly BusinessServiceInterface $businessService
+    ) {}
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of businesses.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $this->authorize('viewAny', Business::class);
+
+        $businesses = $this->businessService->all();
+
+        return $this->success(
+            BusinessResource::collection($businesses),
+            'Businesses retrieved successfully.'
+        );
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created business.
      */
-    public function create()
+    public function store(StoreBusinessRequest $request): JsonResponse
     {
-        //
+        $this->authorize('create', Business::class);
+
+        $data = BusinessData::fromRequest($request);
+
+        $business = $this->businessService->create(
+            $request->user()->id,
+            $data
+        );
+
+        $business->load('owner');
+
+        return $this->success(
+            new BusinessResource($business),
+            'Business created successfully.',
+            201
+        );
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified business.
      */
-    public function store(Request $request)
+    public function show(Business $business): JsonResponse
     {
-        //
+        $this->authorize('view', $business);
+
+        $business->load('owner');
+
+        return $this->success(
+            new BusinessResource($business),
+            'Business retrieved successfully.'
+        );
     }
 
     /**
-     * Display the specified resource.
+     * Update the specified business.
      */
-    public function show(Business $business)
-    {
-        //
+    public function update(
+        UpdateBusinessRequest $request,
+        Business $business
+    ): JsonResponse {
+        $this->authorize('update', $business);
+
+        $data = BusinessData::fromRequest($request);
+
+        $business = $this->businessService->update(
+            $business,
+            $data
+        );
+
+        $business->load('owner');
+
+        return $this->success(
+            new BusinessResource($business),
+            'Business updated successfully.'
+        );
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Remove the specified business.
      */
-    public function edit(Business $business)
+    public function destroy(Business $business): JsonResponse
     {
-        //
-    }
+        $this->authorize('delete', $business);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Business $business)
-    {
-        //
-    }
+        $this->businessService->delete($business);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Business $business)
-    {
-        //
+        return $this->success(
+            null,
+            'Business deleted successfully.'
+        );
     }
 }
