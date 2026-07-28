@@ -78,6 +78,18 @@ return Application::configure(basePath: dirname(__DIR__))
 
     });
 
+    $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, Request $request) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'This action is unauthorized.',
+            'data' => null,
+            'errors' => null,
+            'meta' => null,
+        ], 403);
+
+    });
+
     $exceptions->render(function (\Throwable $e, Request $request) {
 
         return response()->json([

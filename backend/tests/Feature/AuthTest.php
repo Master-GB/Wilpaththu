@@ -24,6 +24,7 @@ class AuthTest extends TestCase
             'email' => 'john@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'role' => 'Jeep Owner',
         ]);
 
         $response

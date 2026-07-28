@@ -38,7 +38,11 @@ class BusinessController extends BaseApiController
      */
     public function store(StoreBusinessRequest $request): JsonResponse
     {
-        $this->authorize('create', Business::class);
+        try {
+            $this->authorize('create', Business::class);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return $this->error('This action is unauthorized.', null, 403);
+        }
 
         $data = BusinessData::fromRequest($request);
 
@@ -78,7 +82,11 @@ class BusinessController extends BaseApiController
         UpdateBusinessRequest $request,
         Business $business
     ): JsonResponse {
-        $this->authorize('update', $business);
+        try {
+            $this->authorize('update', $business);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return $this->error('This action is unauthorized.', null, 403);
+        }
 
         $data = BusinessData::fromRequest($request);
 
