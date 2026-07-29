@@ -104,6 +104,33 @@ class BusinessController extends BaseApiController
     }
 
     /**
+     * Update verification status of the business.
+     */
+    public function verify(Request $request, Business $business): JsonResponse
+    {
+        $this->authorize('updateVerified', $business);
+
+        $validated = $request->validate([
+            'is_verified' => ['required', 'boolean'],
+            'verified_at' => ['nullable', 'date'],
+        ]);
+
+        $business->update([
+            'is_verified' => $validated['is_verified'],
+            'verified_at' => $validated['is_verified']
+                ? ($validated['verified_at'] ?? now())
+                : null,
+        ]);
+
+        $business->load('owner');
+
+        return $this->success(
+            new BusinessResource($business),
+            'Business verification status updated.'
+        );
+    }
+
+    /**
      * Remove the specified business.
      */
     public function destroy(Business $business): JsonResponse
@@ -115,6 +142,29 @@ class BusinessController extends BaseApiController
         return $this->success(
             null,
             'Business deleted successfully.'
+        );
+    }
+
+    /**
+     * Update active status of a business (owner only).
+     */
+    public function updateActive(Request $request, Business $business): JsonResponse
+    {
+        $this->authorize('updateActive', $business);
+
+        $validated = $request->validate([
+            'is_active' => ['required', 'boolean'],
+        ]);
+
+        $business->update([
+            'is_active' => $validated['is_active'],
+        ]);
+
+        $business->load('owner');
+
+        return $this->success(
+            new BusinessResource($business),
+            'Business active status updated.'
         );
     }
 }

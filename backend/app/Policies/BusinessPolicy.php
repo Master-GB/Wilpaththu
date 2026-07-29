@@ -11,9 +11,10 @@ class BusinessPolicy
     /**
      * Admin can perform any action.
      */
-    public function before(User $user): ?bool
+    public function before(User $user, $ability): ?bool
     {
-        if ($user->hasRole(Role::ADMIN->value)) {
+        // Admin can perform any action except changing the active status directly.
+        if ($user->hasRole(Role::ADMIN->value) && $ability !== 'updateActive') {
             return true;
         }
 
@@ -55,6 +56,14 @@ class BusinessPolicy
      * Update a business.
      */
     public function update(User $user, Business $business): bool
+    {
+        return $business->owner_id === $user->id;
+    }
+
+    /**
+     * Update active status of a business (owner only).
+     */
+    public function updateActive(User $user, Business $business): bool
     {
         return $business->owner_id === $user->id;
     }

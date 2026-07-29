@@ -23,8 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/businesses/{business}', [BusinessController::class, 'show']);
 Route::post('/businesses', [BusinessController::class, 'store']);
 Route::put('/businesses/{business}', [BusinessController::class, 'update']);
-Route::delete('/businesses/{business}', [BusinessController::class, 'destroy']);
+    Route::delete('/businesses/{business}', [BusinessController::class, 'destroy']);
+    Route::post('/businesses/{business}/verify', [BusinessController::class, 'verify']);
 });
-
-
-
