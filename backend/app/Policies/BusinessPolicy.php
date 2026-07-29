@@ -14,7 +14,7 @@ class BusinessPolicy
     public function before(User $user, $ability): ?bool
     {
         // Admin can perform any action except changing the active status directly.
-        if ($user->hasRole(Role::ADMIN->value) && $ability !== 'updateActive') {
+        if ($user->hasRole(Role::ADMIN->value) && $ability !== 'updateActive' && $ability !== 'update') {
             return true;
         }
 
@@ -27,9 +27,7 @@ class BusinessPolicy
     public function viewAny(User $user): bool
     {
         return $user->hasAnyRole([
-            Role::JEEP_OWNER->value,
-            Role::TRANSPORT_OWNER->value,
-            Role::TOURIST->value,
+            Role::ADMIN->value,
         ]);
     }
 
@@ -66,6 +64,14 @@ class BusinessPolicy
     public function updateActive(User $user, Business $business): bool
     {
         return $business->owner_id === $user->id;
+    }
+
+    /**
+     * Update verification status of a business.
+     */
+    public function updateVerified(User $user, Business $business): bool
+    {
+        return $user->hasRole(Role::ADMIN->value);
     }
 
     /**
