@@ -20,6 +20,8 @@ class JeepController extends BaseApiController
 
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Jeep::class);
+
         return $this->success(
             JeepResource::collection(
                 $this->jeepService->getAllJeeps()
@@ -30,19 +32,23 @@ class JeepController extends BaseApiController
 
     public function store(StoreJeepRequest $request): JsonResponse
     {
+        $this->authorize('create', Jeep::class);
+
         $jeep = $this->jeepService->createJeep(
             StoreJeepData::fromRequest($request)
         );
 
         return $this->success(
             new JeepResource($jeep),
-            'Jeep created successfully.',
+            'Jeep registered successfully.',
             201
         );
     }
 
     public function show(Jeep $jeep): JsonResponse
     {
+        $this->authorize('view', $jeep);
+
         return $this->success(
             new JeepResource(
                 $this->jeepService->findJeepById($jeep->id)
@@ -55,6 +61,8 @@ class JeepController extends BaseApiController
         UpdateJeepRequest $request,
         Jeep $jeep
     ): JsonResponse {
+
+        $this->authorize('update', $jeep);
 
         $jeep = $this->jeepService->updateJeep(
             $jeep,
@@ -69,6 +77,8 @@ class JeepController extends BaseApiController
 
     public function destroy(Jeep $jeep): JsonResponse
     {
+        $this->authorize('delete', $jeep);
+
         $this->jeepService->deleteJeep($jeep);
 
         return $this->success(
@@ -82,10 +92,12 @@ class JeepController extends BaseApiController
         Jeep $jeep
     ): JsonResponse {
 
+        $this->authorize('assignDriver', $jeep);
+
         $request->validate([
             'driver_id' => [
                 'required',
-                'exists:users,id'
+                'exists:users,id',
             ],
         ]);
 
@@ -102,6 +114,8 @@ class JeepController extends BaseApiController
 
     public function removeJeepDriver(Jeep $jeep): JsonResponse
     {
+        $this->authorize('removeDriver', $jeep);
+
         $jeep = $this->jeepService->removeJeepDriver($jeep);
 
         return $this->success(
@@ -115,10 +129,12 @@ class JeepController extends BaseApiController
         Jeep $jeep
     ): JsonResponse {
 
+        $this->authorize('changeStatus', $jeep);
+
         $request->validate([
             'status' => [
                 'required',
-                'in:Available,Maintenance,Inactive'
+                'in:Available,Maintenance,Inactive',
             ],
         ]);
 
@@ -129,7 +145,7 @@ class JeepController extends BaseApiController
 
         return $this->success(
             new JeepResource($jeep),
-            'Status updated successfully.'
+            'Jeep status updated successfully.'
         );
     }
 }

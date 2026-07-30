@@ -78,16 +78,26 @@ return Application::configure(basePath: dirname(__DIR__))
 
     });
 
-    $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, Request $request) {
+    $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e,Request $request) {
 
-        return response()->json([
-            'success' => false,
-            'message' => 'This action is unauthorized.',
-            'data' => null,
-            'errors' => null,
-            'meta' => null,
-        ], 403);
+        if ($request->is('api/*')) {
 
+            $message = $e->getMessage();
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Authorization failed.',
+                'data' => null,
+                'errors' => [
+                    'authorization' => [
+                        $message !== 'This action is unauthorized.'
+                            ? $message
+                            : 'You are not authorized to perform this action.',
+                    ],
+                ],
+                'meta' => null,
+            ], 403);
+        }
     });
 
     $exceptions->render(function (\Throwable $e, Request $request) {

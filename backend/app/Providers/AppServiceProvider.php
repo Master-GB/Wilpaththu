@@ -14,6 +14,8 @@ use App\Contracts\Repositories\JeepRepositoryInterface;
 use App\Repositories\JeepRepository;
 use App\Contracts\Services\JeepServiceInterface;
 use App\Services\JeepService;
+use App\Policies\JeepPolicy;
+use App\Models\Jeep;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,9 +44,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::policy(
-            Business::class,
-            BusinessPolicy::class
-        );
+        Gate::policy(Business::class, BusinessPolicy::class);
+
+        Gate::policy(Jeep::class, JeepPolicy::class);
     }
 }
