@@ -13,9 +13,14 @@ class JeepPolicy
      */
     public function viewAny(User $user): Response
     {
-        return $user->can('jeep.view')
+
+        if($user->hasRole('Admin') ||$user->hasRole('Tour Guide') || $user->hasRole('Tourist') || $user->hasRole('Jeep Driver')){
+            return Response::allow();
+        }
+
+         return $user->can('jeep.view')
             ? Response::allow()
-            : Response::deny('You do not have permission to view jeeps.');
+            : Response::deny('You do not have permission to view this jeep.');
     }
 
     /**
@@ -23,11 +28,11 @@ class JeepPolicy
      */
     public function view(User $user, Jeep $jeep): Response
     {
-        if ($user->hasRole('Admin')) {
+        if($user->hasRole('Admin') ||$user->hasRole('Tour Guide') || $user->hasRole('Tourist') || $user->hasRole('Jeep Driver')){
             return Response::allow();
         }
 
-        return $user->can('jeep.view')
+         return $user->can('jeep.view')
             ? Response::allow()
             : Response::deny('You do not have permission to view this jeep.');
     }
