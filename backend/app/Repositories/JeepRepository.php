@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class JeepRepository extends BaseRepository implements JeepRepositoryInterface
 {
+    public function __construct(Jeep $jeep)
+    {
+        parent::__construct($jeep);
+    }
+
     public function getAllJeeps(): Collection
     {
         return Jeep::with([

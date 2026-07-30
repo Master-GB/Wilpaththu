@@ -39,7 +39,7 @@ class JeepService extends BaseService implements JeepServiceInterface
 
     public function createJeep(StoreJeepData $data): Jeep
     {
-        $business = $this->businesses->findById($data->business_id);
+        $business = $this->businesses->find($data->business_id);
 
         if (! $business) {
             throw ValidationException::withMessages([

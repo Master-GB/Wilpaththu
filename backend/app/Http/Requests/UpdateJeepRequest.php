@@ -66,6 +66,24 @@ class UpdateJeepRequest extends FormRequest
                 'max:12'
             ],
 
+            'fuel_type' => [
+                'required',
+                Rule::in([
+                    'Petrol',
+                    'Diesel',
+                    'Hybrid',
+                    'Electric',
+                ])
+            ],
+
+            'transmission' => [
+                'nullable',
+                Rule::in([
+                    'Manual',
+                    'Automatic',
+                ])
+            ],
+
             'features' => [
                 'nullable',
                 'array'
