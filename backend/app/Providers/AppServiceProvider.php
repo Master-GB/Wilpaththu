@@ -10,6 +10,10 @@ use App\Repositories\BusinessRepository;
 use App\Services\BusinessService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use App\Contracts\Repositories\JeepRepositoryInterface;
+use App\Repositories\JeepRepository;
+use App\Contracts\Services\JeepServiceInterface;
+use App\Services\JeepService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +27,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             BusinessServiceInterface::class,
             BusinessService::class
+        );
+
+        $this->app->bind(
+            JeepRepositoryInterface::class,
+            JeepRepository::class
+        );
+
+        $this->app->bind(
+            JeepServiceInterface::class,
+            JeepService::class
         );
     }
 
