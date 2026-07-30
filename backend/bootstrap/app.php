@@ -78,26 +78,44 @@ return Application::configure(basePath: dirname(__DIR__))
 
     });
 
-    $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e,Request $request) {
+    $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, Request $request) {
 
-        if ($request->is('api/*')) {
+        $message = $e->getMessage();
 
-            $message = $e->getMessage();
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Authorization failed.',
-                'data' => null,
-                'errors' => [
-                    'authorization' => [
-                        $message !== 'This action is unauthorized.'
-                            ? $message
-                            : 'You are not authorized to perform this action.',
-                    ],
+        return response()->json([
+            'success' => false,
+            'message' => 'Authorization failed.',
+            'data' => null,
+            'errors' => [
+                'authorization' => [
+                    $message !== 'This action is unauthorized.'
+                        ? $message
+                        : 'You are not authorized to perform this action.',
                 ],
-                'meta' => null,
-            ], 403);
-        }
+            ],
+            'meta' => null,
+        ], 403);
+
+    });
+
+    $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $e, Request $request) {
+
+        $message = $e->getMessage();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Authorization failed.',
+            'data' => null,
+            'errors' => [
+                'authorization' => [
+                    ($message !== 'This action is unauthorized.' && $message !== '')
+                        ? $message
+                        : 'You are not authorized to perform this action.',
+                ],
+            ],
+            'meta' => null,
+        ], 403);
+
     });
 
     $exceptions->render(function (\Throwable $e, Request $request) {
