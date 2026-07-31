@@ -16,6 +16,9 @@ use App\Contracts\Services\JeepServiceInterface;
 use App\Services\JeepService;
 use App\Policies\JeepPolicy;
 use App\Models\Jeep;
+use App\Contracts\Repositories\DriverRepositoryInterface;
+use App\Repositories\DriverRepository;
+use App\Models\DriverProfile;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,6 +42,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             JeepServiceInterface::class,
             JeepService::class
+        );
+
+        $this->app->bind(
+            DriverRepositoryInterface::class,
+            DriverRepository::class
         );
     }
 
