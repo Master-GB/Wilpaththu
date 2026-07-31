@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Business;
+use App\Models\DriverProfile;
+use App\Models\Jeep;
 
 class User extends Authenticatable
 {
@@ -41,5 +43,10 @@ class User extends Authenticatable
     public function drivenJeep()
     {
         return $this->hasOne(Jeep::class, 'driver_id');
+    }
+
+    public function driverProfile()
+    {
+        return $this->hasOne(DriverProfile::class);
     }
 }
