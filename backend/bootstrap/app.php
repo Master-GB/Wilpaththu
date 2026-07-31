@@ -80,11 +80,39 @@ return Application::configure(basePath: dirname(__DIR__))
 
     $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, Request $request) {
 
+        $message = $e->getMessage();
+
         return response()->json([
             'success' => false,
-            'message' => 'This action is unauthorized.',
+            'message' => 'Authorization failed.',
             'data' => null,
-            'errors' => null,
+            'errors' => [
+                'authorization' => [
+                    $message !== 'This action is unauthorized.'
+                        ? $message
+                        : 'You are not authorized to perform this action.',
+                ],
+            ],
+            'meta' => null,
+        ], 403);
+
+    });
+
+    $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $e, Request $request) {
+
+        $message = $e->getMessage();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Authorization failed.',
+            'data' => null,
+            'errors' => [
+                'authorization' => [
+                    ($message !== 'This action is unauthorized.' && $message !== '')
+                        ? $message
+                        : 'You are not authorized to perform this action.',
+                ],
+            ],
             'meta' => null,
         ], 403);
 

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\BusinessType;
-use App\Enums\BusinessVerify;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,7 +26,7 @@ class Business extends Model
 
     protected $casts = [
         'business_type' => BusinessType::class,
-        'is_verified' => BusinessVerify::class,
+        'is_verified' => 'boolean',
         'verified_at' => 'datetime',
         'is_active' => 'boolean',
     ];
@@ -36,4 +35,11 @@ class Business extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    public function jeeps()
+    {
+        return $this->hasMany(Jeep::class);
+    }
+
+    
 }

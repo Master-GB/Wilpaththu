@@ -37,4 +37,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Business::class, 'owner_id');
     }
+
+    public function drivenJeep()
+    {
+        return $this->hasOne(Jeep::class, 'driver_id');
+    }
 }
