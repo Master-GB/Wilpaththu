@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Contracts\Repositories;
+namespace App\Contracts\Services;
 
-use App\Models\User;
+use App\DTOs\CreateDriverData;
 use App\Models\DriverProfile;
 
-interface DriverRepositoryInterface
+interface DriverServiceInterface
 {
-    public function createDriverProfile(array $data): DriverProfile;
+    public function createDriver(CreateDriverData $data): array;
 
     public function findDriverByUser(int $userId): ?DriverProfile;
 

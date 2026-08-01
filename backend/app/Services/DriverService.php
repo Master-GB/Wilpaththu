@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Services;
+
+use App\Contracts\Repositories\DriverRepositoryInterface;
+use App\Contracts\Repositories\UserRepositoryInterface;
+use App\Contracts\Services\DriverServiceInterface;
+use App\DTOs\CreateDriverData;
+use App\Models\DriverProfile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Contracts\Repositories\BusinessRepositoryInterface;
+
+class DriverService extends BaseService implements DriverServiceInterface
+{
+    public function __construct(
+        private readonly DriverRepositoryInterface $drivers,
+        private readonly UserRepositoryInterface $users,
+        private readonly BusinessRepositoryInterface $businesses,
+    ) {}
+
+    public function createDriver(CreateDriverData $data): array
+    {
+        return DB::transaction(function () use ($data) {
+
+            $temporaryPassword = Str::password(12);
+
+            // Validate that the e‑mail is not already taken
+            if ($this->users->findByEmail($data->email)) {
+                throw new \Exception('A user with this e‑mail already exists.');
+            }
+
+            // Create the user
+            $user = $this->users->create([
+                'name' => $data->name,
+                'email' => $data->email,
+                'password' => Hash::make($temporaryPassword),
+            ]);
+
+            $user->assignRole('Jeep Driver');
+
+            // Validate Business existence
+            $business = $this->businesses->find($data->business_id);
+            if (!$business) {
+                throw new \Exception('Business not found.');
+            }
+
+            $driver = $this->drivers->createDriverProfile([
+                'user_id' => $user->id,
+                'business_id' => $data->business_id,
+                'phone' => $data->phone,
+                'license_number' => $data->license_number,
+                'license_expiry_date' => $data->license_expiry_date,
+                'experience_years' => $data->experience_years,
+                'languages' => $data->languages,
+                'emergency_contact' => $data->emergency_contact,
+                'availability' => 'Available',
+                'verified' => false,
+            ]);
+
+            return [
+
+                'driver' => $driver->load([
+                    'user',
+                    'business',
+                ]),
+
+                'credentials' => [
+                    'email' => $user->email,
+                    'temporary_password' => $temporaryPassword,
+                ],
+            ];
+        });
+    }
+
+    public function findDriverByUser(int $userId): ?DriverProfile
+    {
+        return $this->drivers->findDriverByUser($userId);
+    }
+
+    public function getBusinessDrivers(int $businessId)
+    {
+        return $this->drivers->getBusinessDrivers($businessId);
+    }
+
+    public function findById(int $id): ?DriverProfile
+    {
+        return $this->drivers->findById($id);
+    }
+
+    public function updateProfile(DriverProfile $driver,array $data): DriverProfile {
+
+        return $this->drivers->updateProfile($driver,$data);
+    }
+
+    public function updateAvailability(DriverProfile $driver,string $availability): DriverProfile {
+
+        return $this->drivers->updateAvailability($driver,$availability);
+    }
+
+    public function updateVerified(DriverProfile $driver,bool $verified): DriverProfile {
+
+        return $this->drivers->updateVerified($driver,$verified);
+    }
+
+    public function deleteProfile(DriverProfile $driver): void {
+
+        $this->drivers->deleteProfile($driver);
+    }
+
+    public function getAvailableDrivers(int $businessId) {
+        return $this->drivers->getAvailableDrivers($businessId);
+    }
+}

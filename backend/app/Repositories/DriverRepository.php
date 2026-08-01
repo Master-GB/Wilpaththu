@@ -8,11 +8,6 @@ use App\Models\DriverProfile;
 
 class DriverRepository implements DriverRepositoryInterface
 {
-    public function createUser(array $data): User
-    {
-        return User::create($data);
-    }
-
     public function createDriverProfile(array $data): DriverProfile
     {
         return DriverProfile::create($data);
