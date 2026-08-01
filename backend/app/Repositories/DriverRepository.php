@@ -5,6 +5,9 @@ namespace App\Repositories;
 use App\Contracts\Repositories\DriverRepositoryInterface;
 use App\Models\User;
 use App\Models\DriverProfile;
+use App\DTOs\UpdateDriverData;
+use App\DTOs\UpdateDriverAvailabilityData;
+use App\DTOs\UpdateDriverVerificationData;
 
 class DriverRepository implements DriverRepositoryInterface
 {
@@ -27,28 +30,28 @@ class DriverRepository implements DriverRepositoryInterface
             ->get();
     }
 
-    public function updateProfile(DriverProfile $driver, array $data): DriverProfile
+    public function updateProfile(DriverProfile $driver, UpdateDriverData $data): DriverProfile
     {
-        $driver->update($data);
+        $driver->update($data->toArray());
         return $driver->refresh();
     }
 
-    public function updateAvailability(DriverProfile $driver, string $availability): DriverProfile
+    public function updateAvailability(DriverProfile $driver, UpdateDriverAvailabilityData $data): DriverProfile
     {
         $driver->update([
-        'availability' => $availability,
+        'availability' => $data->availability,
     ]);
 
-        return $driver->refresh();
+    return $driver->refresh();
     }
     
-    public function updateVerified(DriverProfile $driver, bool $verified): DriverProfile
+    public function updateVerified(DriverProfile $driver, UpdateDriverVerificationData $data): DriverProfile
     {
         $driver->update([
-            'verified' => $verified,
-        ]);
+        'verified' => $data->verified,
+    ]);
 
-        return $driver->refresh();
+    return $driver->refresh();
     }
 
     public function deleteProfile(DriverProfile $driver): void

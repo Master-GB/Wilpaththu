@@ -15,11 +15,11 @@ interface DriverRepositoryInterface
 
     public function findById(int $id): ?DriverProfile;
 
-    public function updateProfile(DriverProfile $driver, array $data): DriverProfile;
+    public function updateProfile(DriverProfile $driver, \App\DTOs\UpdateDriverData $data): DriverProfile;
 
-    public function updateAvailability(DriverProfile $driver, string $availability): DriverProfile;
+    public function updateAvailability(DriverProfile $driver, \App\DTOs\UpdateDriverAvailabilityData $data): DriverProfile;
 
-    public function updateVerified(DriverProfile $driver, bool $verified): DriverProfile;
+    public function updateVerified(DriverProfile $driver, \App\DTOs\UpdateDriverVerificationData $data): DriverProfile;
 
     public function deleteProfile(DriverProfile $driver): void;
 

@@ -10,6 +10,9 @@ use App\Models\DriverProfile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\DTOs\UpdateDriverData;
+use App\DTOs\UpdateDriverAvailabilityData;
+use App\DTOs\UpdateDriverVerificationData;
 use App\Contracts\Repositories\BusinessRepositoryInterface;
 
 class DriverService extends BaseService implements DriverServiceInterface
@@ -89,21 +92,20 @@ class DriverService extends BaseService implements DriverServiceInterface
         return $this->drivers->findById($id);
     }
 
-    public function updateProfile(DriverProfile $driver,array $data): DriverProfile {
+    public function updateProfile(DriverProfile $driver, UpdateDriverData $data): DriverProfile {
 
-        return $this->drivers->updateProfile($driver,$data);
+        return $this->drivers->updateProfile($driver, $data);
     }
 
-    public function updateAvailability(DriverProfile $driver,string $availability): DriverProfile {
+    public function updateAvailability(DriverProfile $driver, UpdateDriverAvailabilityData $data): DriverProfile {
 
-        return $this->drivers->updateAvailability($driver,$availability);
+        return $this->drivers->updateAvailability($driver, $data);
     }
 
-    public function updateVerified(DriverProfile $driver,bool $verified): DriverProfile {
+    public function updateVerified(DriverProfile $driver, UpdateDriverVerificationData $data): DriverProfile {
 
-        return $this->drivers->updateVerified($driver,$verified);
+        return $this->drivers->updateVerified($driver, $data);
     }
-
     public function deleteProfile(DriverProfile $driver): void {
 
         $this->drivers->deleteProfile($driver);
