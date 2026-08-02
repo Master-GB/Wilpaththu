@@ -40,6 +40,14 @@ class BusinessPolicy
     }
 
     /**
+     * Admin or business owner can view available drivers
+     */
+    public function viewAvailable(User $user, Business $business): bool
+    {
+        return $user->hasRole('Admin') || $business->owner_id === $user->id;
+    }
+
+    /**
      * Create a business.
      */
     public function create(User $user): bool

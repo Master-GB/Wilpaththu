@@ -15,12 +15,6 @@ class UpdateDriverRequest extends FormRequest
     {
         return [
 
-             'name' => [
-                'sometimes',
-                'string',
-                'max:255',
-            ],
-
             'phone' => [
                 'sometimes',
                 'string',

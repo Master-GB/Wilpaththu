@@ -21,6 +21,7 @@ use App\Repositories\DriverRepository;
 use App\Models\DriverProfile;
 use App\Contracts\Services\DriverServiceInterface;
 use App\Services\DriverService;
+use App\Policies\DriverPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -62,5 +63,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Business::class, BusinessPolicy::class);
 
         Gate::policy(Jeep::class, JeepPolicy::class);
+
+        Gate::policy( DriverProfile::class,DriverPolicy::class);
+
     }
 }

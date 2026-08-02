@@ -34,6 +34,15 @@ class DriverService extends BaseService implements DriverServiceInterface
                 throw new \Exception('A user with this e‑mail already exists.');
             }
 
+            $business = $this->businesses->find($data->business_id);
+            if (! $business) {
+                 throw new \Exception('Business not found.');
+            }
+
+            if ($business->owner_id !== auth()->id()) {
+                throw new \Exception('You do not own this business.');
+            }
+
             // Create the user
             $user = $this->users->create([
                 'name' => $data->name,
@@ -42,12 +51,6 @@ class DriverService extends BaseService implements DriverServiceInterface
             ]);
 
             $user->assignRole('Jeep Driver');
-
-            // Validate Business existence
-            $business = $this->businesses->find($data->business_id);
-            if (!$business) {
-                throw new \Exception('Business not found.');
-            }
 
             $driver = $this->drivers->createDriverProfile([
                 'user_id' => $user->id,
@@ -84,6 +87,15 @@ class DriverService extends BaseService implements DriverServiceInterface
 
     public function getBusinessDrivers(int $businessId)
     {
+        $business = $this->businesses->find($businessId);
+        if (! $business) {
+            throw new \Exception('Business not found.');
+        }
+
+        if ($business->owner_id !== auth()->id()) {
+            throw new \Exception('You do not own this business.');
+        }
+
         return $this->drivers->getBusinessDrivers($businessId);
     }
 
@@ -112,6 +124,11 @@ class DriverService extends BaseService implements DriverServiceInterface
     }
 
     public function getAvailableDrivers(int $businessId) {
+
+        $business = $this->businesses->find($businessId);
+        if (! $business) {
+            throw new \Exception('Business not found.');
+        }
         return $this->drivers->getAvailableDrivers($businessId);
     }
 }

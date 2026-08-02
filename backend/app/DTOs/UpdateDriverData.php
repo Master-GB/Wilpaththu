@@ -21,8 +21,6 @@ readonly class UpdateDriverData
 
         return new self(
 
-            name: $request->input('name'),
-        
             phone: $request->input('phone'),
 
             license_number: $request->input('license_number'),
@@ -40,7 +38,6 @@ readonly class UpdateDriverData
     public function toArray(): array
     {
         return array_filter([
-            'name' => $this->name,
             'phone' => $this->phone,
             'license_number' => $this->license_number,
             'license_expiry_date' => $this->license_expiry_date,
