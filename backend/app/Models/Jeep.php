@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Business;
+use App\Models\DriverProfile;
+use App\Models\User;
 
 class Jeep extends Model
 {
@@ -41,6 +44,4 @@ class Jeep extends Model
     {
         return $this->belongsTo(User::class, 'driver_id');
     }
-
-    
 }

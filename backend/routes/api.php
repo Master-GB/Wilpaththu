@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\Api\JeepController;
+use App\Http\Controllers\Api\DriverController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -41,4 +42,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('jeeps/{jeep}/remove-driver',[JeepController::class, 'removeJeepDriver']);
     Route::patch('jeeps/{jeep}/change-status',[JeepController::class, 'changeJeepStatus']);
 
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/drivers', [DriverController::class, 'store']);
+
+    Route::get('/drivers/me', [DriverController::class, 'me']);
+
+    Route::get('/drivers/{driver}', [DriverController::class, 'show']);
+
+    Route::put('/drivers/{driver}', [DriverController::class, 'update']);
+
+    Route::patch('/drivers/{driver}/availability',[DriverController::class, 'updateAvailability']);
+
+    Route::patch('/drivers/{driver}/verified',[DriverController::class, 'updateVerified']);
+
+    Route::delete('/drivers/{driver}', [DriverController::class, 'destroy']);
+
+    Route::get('/businesses/{business}/drivers',[DriverController::class, 'businessDrivers']);
+
+    Route::get('/businesses/{business}/drivers/available',[DriverController::class, 'availableDrivers']);
+
+    // later we add get method for retreive all the driver from admin side
 });

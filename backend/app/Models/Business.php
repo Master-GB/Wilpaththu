@@ -41,5 +41,8 @@ class Business extends Model
         return $this->hasMany(Jeep::class);
     }
 
-    
+    public function drivers()
+    {
+        return $this->hasMany(DriverProfile::class);
+    }
 }

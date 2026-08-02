@@ -16,6 +16,12 @@ use App\Contracts\Services\JeepServiceInterface;
 use App\Services\JeepService;
 use App\Policies\JeepPolicy;
 use App\Models\Jeep;
+use App\Contracts\Repositories\DriverRepositoryInterface;
+use App\Repositories\DriverRepository;
+use App\Models\DriverProfile;
+use App\Contracts\Services\DriverServiceInterface;
+use App\Services\DriverService;
+use App\Policies\DriverPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,6 +46,16 @@ class AppServiceProvider extends ServiceProvider
             JeepServiceInterface::class,
             JeepService::class
         );
+
+        $this->app->bind(
+            DriverRepositoryInterface::class,
+            DriverRepository::class
+        );
+
+        $this->app->bind(
+            DriverServiceInterface::class,
+            DriverService::class
+        );
     }
 
     public function boot(): void
@@ -47,5 +63,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Business::class, BusinessPolicy::class);
 
         Gate::policy(Jeep::class, JeepPolicy::class);
+
+        Gate::policy( DriverProfile::class,DriverPolicy::class);
+
     }
 }
