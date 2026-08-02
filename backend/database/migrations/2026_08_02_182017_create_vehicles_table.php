@@ -6,9 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('jeeps', function (Blueprint $table) {
+        Schema::create('transport', function (Blueprint $table) {
+
             $table->id();
 
             $table->foreignId('business_id')
@@ -20,45 +24,50 @@ return new class extends Migration
                 ->constrained('driver_profiles')
                 ->nullOnDelete();
 
-            $table->string('registration_number')->unique();
+            $table->string('vehicle_number')->unique();
+
+            $table->enum('vehicle_type', [
+                'Car',
+                'SUV',
+                'Van',
+                'Mini Bus',
+                'Bus',
+                'Luxury Car',
+            ]);
 
             $table->string('brand');
+
             $table->string('model');
+
             $table->year('year');
 
-            $table->string('color')->nullable();
+            $table->string('color');
 
             $table->unsignedTinyInteger('seat_capacity');
 
-            $table->enum('fuel_type', [
-                'Petrol',
-                'Diesel',
-                'Hybrid',
-                'Electric'
-            ]);
+            $table->unsignedTinyInteger('luggage_capacity')
+                ->nullable();
 
-            $table->enum('transmission', [
-                'Manual',
-                'Automatic'
-            ]);
-
-           $table->json('features')->nullable();
-
-            $table->text('description')->nullable();
+            $table->json('features')
+                ->nullable();
 
             $table->enum('status', [
                 'Available',
                 'Maintenance',
-                'Inactive'
+                'Inactive',
             ])->default('Available');
 
             $table->timestamps();
+
             $table->softDeletes();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('jeeps');
+        Schema::dropIfExists('vehicles');
     }
 };

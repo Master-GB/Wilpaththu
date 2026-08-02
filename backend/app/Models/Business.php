@@ -45,4 +45,9 @@ class Business extends Model
     {
         return $this->hasMany(DriverProfile::class);
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }
