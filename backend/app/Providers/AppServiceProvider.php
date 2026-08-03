@@ -26,6 +26,8 @@ use App\Contracts\Repositories\VehicleRepositoryInterface;
 use App\Repositories\VehicleRepository;
 use App\Contracts\Services\VehicleServiceInterface;
 use App\Services\VehicleService;
+use App\Models\Vehicle;
+use App\Policies\VehiclePolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -78,7 +80,9 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::policy(Jeep::class, JeepPolicy::class);
 
-        Gate::policy( DriverProfile::class,DriverPolicy::class);
+        Gate::policy(DriverProfile::class,DriverPolicy::class);
+
+        Gate::policy(Vehicle::class, VehiclePolicy::class);
 
     }
 }
