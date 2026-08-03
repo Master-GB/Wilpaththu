@@ -5,7 +5,10 @@ namespace App\Providers;
 use App\Enums\Role;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-
+use App\Models\Business;
+use App\Models\Vehicle;               
+use App\Policies\BusinessPolicy;
+use App\Policies\VehiclePolicy; 
 class AuthServiceProvider extends ServiceProvider
 {
     public function boot(): void
@@ -32,5 +35,6 @@ class AuthServiceProvider extends ServiceProvider
 
     protected $policies = [
     \App\Models\Business::class => \App\Policies\BusinessPolicy::class,
+     Vehicle::class  => VehiclePolicy::class,
 ];
 }

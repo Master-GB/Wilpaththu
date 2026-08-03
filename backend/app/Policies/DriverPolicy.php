@@ -5,18 +5,20 @@ namespace App\Policies;
 use App\Models\Business;
 use App\Models\DriverProfile;
 use App\Models\User;
+use App\Enums\Role;  
 use Illuminate\Auth\Access\Response;
 
 class DriverPolicy
 {
     /**
-     * Only Jeep Owners can create drivers.
+     * Only Jeep Owner and Transport Owner can create drivers.
      */
     public function create(User $user): Response
     {
-        return $user->hasRole('Jeep Owner')
+        return $user->hasRole(Role::JEEP_OWNER->value) ||
+             $user->hasRole(Role::TRANSPORT_OWNER->value)
             ? Response::allow()
-            : Response::deny('Only Jeep Owners can create drivers.');
+            : Response::deny('Only Jeep Owners or Transport Owners can create drivers.');
     }
 
     /**

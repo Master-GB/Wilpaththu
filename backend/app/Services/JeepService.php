@@ -19,13 +19,11 @@ class JeepService extends BaseService implements JeepServiceInterface
         private readonly BusinessRepositoryInterface $businesses,
     ) {}
 
-    public function getAllJeeps(): Collection
-    {
+    public function getAllJeeps(): Collection{
         return $this->jeeps->getAllJeeps();
     }
 
-    public function findJeepById(int $id): Jeep
-    {
+    public function findJeepById(int $id): Jeep{
         $jeep = $this->jeeps->findJeepById($id);
 
         if (! $jeep) {
@@ -37,8 +35,7 @@ class JeepService extends BaseService implements JeepServiceInterface
         return $jeep;
     }
 
-    public function createJeep(StoreJeepData $data): Jeep
-    {
+    public function createJeep(StoreJeepData $data): Jeep{
         $business = $this->businesses->find($data->business_id);
 
         if (! $business) {
@@ -47,25 +44,43 @@ class JeepService extends BaseService implements JeepServiceInterface
             ]);
         }
 
+        if ($business->owner_id !== auth()->id()) {
+            throw new HttpException(
+                403,
+                'You do not own this business.'
+            );
+        }
+
         return $this->jeeps->createJeep($data->toArray());
     }
 
-    public function updateJeep(Jeep $jeep, UpdateJeepData $data): Jeep
-    {
+    public function updateJeep(Jeep $jeep, UpdateJeepData $data): Jeep{
         return $this->jeeps->updateJeep(
             $jeep,
             $data->toArray()
         );
     }
 
-    public function deleteJeep(Jeep $jeep): bool
-    {
+    public function deleteJeep(Jeep $jeep): bool{
         return $this->jeeps->deleteJeep($jeep);
     }
 
-    public function assignJeepDriver(Jeep $jeep, int $driverId): Jeep
-    {
+    public function assignJeepDriver(Jeep $jeep, int $driverId): Jeep{
         $driver = User::findOrFail($driverId);
+
+        if (! $driver) {
+            throw new HttpException(
+                404,
+                'Driver not found.'
+            );
+        }
+
+        if ($driver->business_id !== $jeeps->business_id) {
+            throw new HttpException(
+                403,
+                'Driver does not belong to this business.'
+            );
+        }
 
         if (! $driver->hasRole('Jeep Driver')) {
             throw ValidationException::withMessages([
@@ -89,19 +104,22 @@ class JeepService extends BaseService implements JeepServiceInterface
         );
     }
 
-    public function removeJeepDriver(Jeep $jeep): Jeep
-    {
+    public function removeJeepDriver(Jeep $jeep): Jeep{
         return $this->jeeps->assignJeepDriver(
             $jeep,
             null
         );
     }
 
-    public function changeJeepStatus(Jeep $jeep, string $status): Jeep
-    {
+    public function changeJeepStatus(Jeep $jeep, string $status): Jeep{
         return $this->jeeps->changeJeepStatus(
             $jeep,
             $status
         );
     }
+
+    public function getJeepsByBusiness(int $businessId) {
+        return $this->jeeps->getByBusiness($businessId);
+    }
+
 }

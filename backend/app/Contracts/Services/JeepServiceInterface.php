@@ -24,4 +24,7 @@ interface JeepServiceInterface
     public function removeJeepDriver(Jeep $jeep): Jeep;
 
     public function changeJeepStatus(Jeep $jeep, string $status): Jeep;
+ 
+    public function getJeepsByBusiness(int $businessId);
+
 }

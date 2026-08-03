@@ -50,4 +50,15 @@ class DriverProfile extends Model
     {
         return $this->belongsTo(Business::class);
     }
+
+    public function drivenJeeps()
+    {
+        return $this->hasOne(Jeep::class,'driver_id');
+    }
+
+    public function drivenVehicles()
+    {
+        return $this->hasOne(Vehicle::class,'driver_id');
+    }
+    
 }

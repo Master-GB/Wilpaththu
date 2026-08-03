@@ -210,4 +210,14 @@ class JeepPolicy
 
         return Response::allow();
     }
+
+    public function viewBusinessJeeps(User $user, Business $business): Response
+    {
+ 
+        if ($user->hasRole('Jeep Owner') && $business->owner_id === $user->id) {
+            return Response::allow();
+        }
+        return Response::deny('You are not authorized to view vehicles for this business.');
+    }
+    
 }

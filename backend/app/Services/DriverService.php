@@ -14,6 +14,8 @@ use App\DTOs\UpdateDriverData;
 use App\DTOs\UpdateDriverAvailabilityData;
 use App\DTOs\UpdateDriverVerificationData;
 use App\Contracts\Repositories\BusinessRepositoryInterface;
+use App\Enums\BusinessType;
+use App\Enums\Role;
 
 class DriverService extends BaseService implements DriverServiceInterface
 {
@@ -50,7 +52,11 @@ class DriverService extends BaseService implements DriverServiceInterface
                 'password' => Hash::make($temporaryPassword),
             ]);
 
-            $user->assignRole('Jeep Driver');
+            if ($business->business_type === BusinessType::JEEP) {
+                 $user->assignRole(Role::JEEP_DRIVER->value);
+            } elseif ($business->business_type === BusinessType::TRANSPORT) {
+                 $user->assignRole(Role::TRANSPORT_DRIVER->value);
+            }
 
             $driver = $this->drivers->createDriverProfile([
                 'user_id' => $user->id,

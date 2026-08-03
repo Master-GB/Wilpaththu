@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\Api\JeepController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -37,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/jeeps', [JeepController::class, 'store']);
     Route::put('/jeeps/{jeep}', [JeepController::class, 'update']);
     Route::delete('/jeeps/{jeep}', [JeepController::class, 'destroy']);
+    Route::get('businesses/{business}/jeeps', [JeepController::class, 'getBusinessJeeps']);
 
     Route::patch('jeeps/{jeep}/assign-driver',[JeepController::class, 'assignJeepDriver']);
     Route::patch('jeeps/{jeep}/remove-driver',[JeepController::class, 'removeJeepDriver']);
@@ -65,4 +67,28 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/businesses/{business}/drivers/available',[DriverController::class, 'availableDrivers']);
 
     // later we add get method for retreive all the driver from admin side
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+
+   // Route::apiResource('vehicles', VehicleController::class);
+
+    Route::get('/vehicles', [VehicleController::class, 'index']);
+
+    Route::post('/vehicles', [VehicleController::class, 'store']);
+
+    Route::get('/vehicles/{vehicle}', [VehicleController::class, 'show']);
+
+    Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update']);
+
+    Route::delete('/vehicles/{vehicle}', [VehicleController::class, 'destroy']);
+
+    Route::patch('vehicles/{vehicle}/assign-driver',[VehicleController::class, 'assignDriver']);
+
+    Route::patch('vehicles/{vehicle}/remove-driver',[VehicleController::class, 'removeDriver']);
+
+    Route::get('businesses/{business}/vehicles',[VehicleController::class, 'getBusinessVehicles']);
+
+    Route::patch('vehicles/{vehicle}/status',[VehicleController::class, 'changeStatus']);
 });
