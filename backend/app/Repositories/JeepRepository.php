@@ -72,4 +72,14 @@ class JeepRepository extends BaseRepository implements JeepRepositoryInterface
             'driver',
         ]);
     }
+
+  
+    public function getByBusiness(int $businessId)
+    {
+        return Jeep::where('business_id', $businessId)
+            ->with([
+                'business',
+                'driver',
+            ])->latest()->get();
+    }
 }

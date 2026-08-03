@@ -52,7 +52,7 @@ class UpdateDriverRequest extends FormRequest
             'emergency_contact' => [
                 'sometimes',
                 'string',
-                'max:255',
+                'max:15',
             ],
         ];
     }

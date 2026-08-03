@@ -72,7 +72,7 @@ class CreateDriverRequest extends FormRequest
             'emergency_contact' => [
                 'nullable',
                 'string',
-                'max:20',
+                'max:15',
             ],
         ];
     }

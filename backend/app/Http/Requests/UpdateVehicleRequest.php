@@ -19,7 +19,7 @@ class UpdateVehicleRequest extends FormRequest
                 'sometimes',
                 'string',
                 'max:50',
-                'unique:vehicles,vehicle_number,' . $this->route('vehicle')->id,
+                'unique:transport,vehicle_number,' . $this->route('vehicle')->id,
             ],
 
             'vehicle_type' => [

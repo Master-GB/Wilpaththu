@@ -20,11 +20,9 @@ class VehicleService implements VehicleServiceInterface
         private readonly DriverRepositoryInterface $drivers,
     ) {}
 
-    public function createVehicle(
-        StoreVehicleData $data
-    ): Vehicle {
+    public function createVehicle(StoreVehicleData $data): Vehicle {
 
-        $business = $this->businesses->findById(
+        $business = $this->businesses->find(
             $data->business_id
         );
 
@@ -47,22 +45,16 @@ class VehicleService implements VehicleServiceInterface
         );
     }
 
-    public function getAllVehicles()
-    {
+    public function getAllVehicles() {
         return $this->vehicles->getAllVehicles();
     }
 
-    public function findVehicleById(
-        int $id
-    ): ?Vehicle {
+    public function findVehicleById(int $id): ?Vehicle {
 
         return $this->vehicles->findById($id);
     }
 
-    public function updateVehicle(
-        Vehicle $vehicle,
-        UpdateVehicleData $data
-    ): Vehicle {
+    public function updateVehicle(Vehicle $vehicle,UpdateVehicleData $data): Vehicle {
 
         return $this->vehicles->updateVehicle(
             $vehicle,
@@ -70,17 +62,12 @@ class VehicleService implements VehicleServiceInterface
         );
     }
 
-    public function deleteVehicle(
-        Vehicle $vehicle
-    ): void {
+    public function deleteVehicle(Vehicle $vehicle): void {
 
         $this->vehicles->deleteVehicle($vehicle);
     }
 
-    public function assignDriver(
-        Vehicle $vehicle,
-        int $driverId
-    ): Vehicle {
+    public function assignDriver(Vehicle $vehicle,int $driverId): Vehicle {
 
         $driver = $this->drivers->findById($driverId);
 
@@ -108,7 +95,7 @@ class VehicleService implements VehicleServiceInterface
         if ($driver->drivenVehicles()->exists()) {
             throw new HttpException(
                 422,
-                'Driver is already assigned to another vehicle.'
+                'Driver is already assigned to a vehicle.'
             );
         }
 
@@ -118,21 +105,20 @@ class VehicleService implements VehicleServiceInterface
         );
     }
 
-    public function removeDriver(
-        Vehicle $vehicle
-    ): Vehicle {
+    public function removeDriver(Vehicle $vehicle): Vehicle {
 
         return $this->vehicles->removeDriver($vehicle);
     }
 
-    public function changeStatus(
-        Vehicle $vehicle,
-        UpdateVehicleStatusData $data
-    ): Vehicle {
+    public function changeStatus(Vehicle $vehicle,UpdateVehicleStatusData $data): Vehicle {
 
         return $this->vehicles->changeStatus(
             $vehicle,
             $data->status
         );
+    }
+
+    public function getVehiclesByBusiness(int $businessId){
+        return $this->vehicles->getByBusiness($businessId);
     }
 }

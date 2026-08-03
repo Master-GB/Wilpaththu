@@ -148,4 +148,15 @@ class JeepController extends BaseApiController
             'Jeep status updated successfully.'
         );
     }
+
+    public function getBusinessJeeps(Request $request, Business $business): JsonResponse
+    {
+        $this->authorize('viewBusinessJeeps', $business);
+        $jeeps = $this->jeepService->getJeepsByBusiness($business->id);
+        return $this->success(
+            JeepResource::collection($jeeps),
+            'Business jeeps retrieved successfully.'
+        );
+    }
+
 }

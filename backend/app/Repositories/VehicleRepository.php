@@ -20,6 +20,18 @@ class VehicleRepository implements VehicleRepositoryInterface
         ])->latest()->get();
     }
 
+    /**
+     * Get all vehicles for a given business.
+     */
+    public function getByBusiness(int $businessId)
+    {
+        return Vehicle::where('business_id', $businessId)
+            ->with([
+                'business',
+                'driver.user',
+            ])->latest()->get();
+    }
+
     public function findById(int $id): ?Vehicle
     {
         return Vehicle::with([

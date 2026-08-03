@@ -20,4 +20,7 @@ interface JeepRepositoryInterface
     public function assignJeepDriver(Jeep $jeep, ?int $driverId): Jeep;
 
     public function changeJeepStatus(Jeep $jeep, string $status): Jeep;
+    
+    public function getByBusiness(int $businessId);
+
 }

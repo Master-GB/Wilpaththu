@@ -41,4 +41,7 @@ interface VehicleServiceInterface
         Vehicle $vehicle,
         UpdateVehicleStatusData $data
     ): Vehicle;
+
+    public function getVehiclesByBusiness(int $businessId);
+
 }

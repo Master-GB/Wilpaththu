@@ -24,7 +24,7 @@ class StoreVehicleRequest extends FormRequest
                 'required',
                 'string',
                 'max:50',
-                'unique:vehicles,vehicle_number',
+                'unique:transport,vehicle_number',
             ],
 
             'vehicle_type' => [

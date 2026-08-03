@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Enums\Role;
 use App\Models\Business;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 class BusinessPolicy
 {
@@ -46,6 +47,30 @@ class BusinessPolicy
     {
         return $user->hasRole('Admin') || $business->owner_id === $user->id;
     }
+
+    
+    /**
+     * View vehicles for a specific business (Transport Owner).
+     */
+    public function viewBusinessVehicles(User $user, Business $business): Response
+    {
+        if ($user->hasRole('Transport Owner') && $business->owner_id === $user->id) {
+            return Response::allow();
+        }
+        return Response::deny('You are not authorized to view vehicles for this business.');
+    }
+
+     /**
+     * View Jeeps for a specific business (Jeep Owner).
+     */
+    public function viewBusinessJeeps(User $user, Business $business): Response
+    {
+        if ($user->hasRole('Jeep Owner') && $business->owner_id === $user->id) {
+            return Response::allow();
+        }
+        return Response::deny('You are not authorized to view jeeps for this business.');
+    }
+
 
     /**
      * Create a business.

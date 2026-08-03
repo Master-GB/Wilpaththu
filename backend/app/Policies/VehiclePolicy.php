@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\Business;
 use Illuminate\Auth\Access\Response;
 
 class VehiclePolicy
@@ -126,8 +127,22 @@ class VehiclePolicy
      */
     public function changeStatus(User $user, Vehicle $vehicle): Response
     {
+        // existing method unchanged
         return $user->hasRole('Transport Owner') && $vehicle->business->owner_id === $user->id
             ? Response::allow()
             : Response::deny('You do not have permission to change the status of this vehicle.');
     }
+
+    /**
+     * View vehicles for a specific business.
+     */
+    public function viewBusinessVehicles(User $user, Business $business): Response
+    {
+ 
+        if ($user->hasRole('Transport Owner') && $business->owner_id === $user->id) {
+            return Response::allow();
+        }
+        return Response::deny('You are not authorized to view vehicles for this business.');
+    }
+    
 }
