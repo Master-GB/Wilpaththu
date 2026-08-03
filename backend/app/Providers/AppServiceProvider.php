@@ -22,6 +22,8 @@ use App\Models\DriverProfile;
 use App\Contracts\Services\DriverServiceInterface;
 use App\Services\DriverService;
 use App\Policies\DriverPolicy;
+use App\Contracts\Repositories\VehicleRepositoryInterface;
+use App\Repositories\VehicleRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -55,6 +57,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             DriverServiceInterface::class,
             DriverService::class
+        );
+
+        $this->app->bind(
+            VehicleRepositoryInterface::class,
+            VehicleRepository::class
         );
     }
 
