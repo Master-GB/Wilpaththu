@@ -28,6 +28,8 @@ use App\Contracts\Services\VehicleServiceInterface;
 use App\Services\VehicleService;
 use App\Models\Vehicle;
 use App\Policies\VehiclePolicy;
+use App\Contracts\Repositories\HotelRepositoryInterface;
+use App\Repositories\HotelRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -71,6 +73,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             VehicleServiceInterface::class,
             VehicleService::class
+        );
+
+        $this->app->bind(
+            HotelRepositoryInterface::class,
+            HotelRepository::class
         );
     }
 
