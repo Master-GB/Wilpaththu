@@ -14,24 +14,22 @@ class HotelRepository implements HotelRepositoryInterface
 
     public function getAll()
     {
-        return Hotel::latest()->get();
+        return Hotel::with('owner')->latest()->get();
     }
 
     public function findById(int $id): ?Hotel
     {
-        return Hotel::find($id);
+        return Hotel::with('owner')->find($id);
     }
 
     public function findByOwner(int $userId): ?Hotel
     {
-        return Hotel::where('user_id', $userId)
-            ->first();
+        return Hotel::with('owner')->where('user_id', $userId)->first();
     }
 
     public function findBySlug(string $slug): ?Hotel
     {
-        return Hotel::where('slug', $slug)
-            ->first();
+        return Hotel::with('owner')->where('slug', $slug)->first();
     }
 
     public function update(

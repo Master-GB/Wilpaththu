@@ -32,6 +32,8 @@ use App\Contracts\Repositories\HotelRepositoryInterface;
 use App\Repositories\HotelRepository;
 use App\Services\HotelService;
 use App\Contracts\Services\HotelServiceInterface;
+use App\Models\Hotel;
+use App\Policies\HotelPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -97,6 +99,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(DriverProfile::class,DriverPolicy::class);
 
         Gate::policy(Vehicle::class, VehiclePolicy::class);
+
+        Gate::policy(Hotel::class,HotelPolicy::class);
 
     }
 }
