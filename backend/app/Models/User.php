@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(DriverProfile::class);
     }
+
+    public function hotel()
+    {
+        return $this->hasOne(Hotel::class);
+    }
 }
