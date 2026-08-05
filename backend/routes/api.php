@@ -5,6 +5,7 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\Api\JeepController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\HotelController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -91,4 +92,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('businesses/{business}/vehicles',[VehicleController::class, 'getBusinessVehicles']);
 
     Route::patch('vehicles/{vehicle}/status',[VehicleController::class, 'changeStatus']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+
+   // Route::apiResource('hotels',HotelController::class);
+
+    Route::get('/hotels', [HotelController::class, 'index']);
+
+    Route::post('/hotels', [HotelController::class, 'store']);
+
+    Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->where('hotel', '[0-9]+');
+
+    Route::put('/hotels/{hotel}', [HotelController::class, 'update']);
+
+    Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy']);
+
+    Route::get('hotels/my-hotel',[HotelController::class, 'getMyHotel']);
+
+    Route::get('hotels/slug/{slug}',[HotelController::class, 'showBySlug']);
+
+    Route::patch('hotels/{hotel}/status',[HotelController::class, 'updateStatus']);
+
+    Route::patch('hotels/{hotel}/verification',[HotelController::class, 'updateVerification']);
+
+    Route::patch('hotels/{hotel}/star-rating',[HotelController::class, 'updateStarRating']);
+
+    Route::patch('hotels/{hotel}/featured-type',[HotelController::class, 'updateFeaturedType']);
+
+    Route::patch('hotels/{id}/restore',[HotelController::class, 'restore']);
+
 });
