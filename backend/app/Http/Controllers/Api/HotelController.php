@@ -21,6 +21,8 @@ use App\Http\Requests\UpdateHotelFeaturedTypeRequest;
 
 class HotelController extends BaseApiController
 {
+
+    // add get all hotel with unverified hotel(leter we can filter that) and  add only get verified hote
     public function __construct(
         private readonly HotelServiceInterface $hotelService
     ) {}
@@ -28,7 +30,7 @@ class HotelController extends BaseApiController
     public function index(): JsonResponse
     {
 
-        $this->authorize('viewAny', Hotel::class);
+        $this->authorize('viewAny', Hotel::class); // later we need to modify this.. policy also need change related to this..
 
         return $this->success(
             HotelResource::collection(
@@ -104,6 +106,8 @@ class HotelController extends BaseApiController
         $hotel = $this->hotelService
             ->findByOwner(auth()->id());
 
+        $this->authorize('getMyHotel', $hotel);
+        
         if (!$hotel) {
 
             return $this->error(

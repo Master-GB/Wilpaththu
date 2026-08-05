@@ -102,7 +102,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/hotels', [HotelController::class, 'store']);
 
-    Route::get('/hotels/{hotel}', [HotelController::class, 'show']);
+    Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->where('hotel', '[0-9]+');
 
     Route::put('/hotels/{hotel}', [HotelController::class, 'update']);
 
