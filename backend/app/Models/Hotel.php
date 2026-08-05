@@ -57,11 +57,11 @@ class Hotel extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // public function rooms()
-    // {
-    //     return $this->hasMany(Room::class);
-    // }
-
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
+    
     // public function images()
     // {
     //     return $this->hasMany(HotelImage::class);
