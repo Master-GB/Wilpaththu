@@ -12,6 +12,7 @@ class Vehicle extends Model
     use SoftDeletes;
 
      protected $table = 'transport';
+     
 
     protected $fillable = [
 

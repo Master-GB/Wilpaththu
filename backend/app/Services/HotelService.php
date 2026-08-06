@@ -20,8 +20,7 @@ class HotelService implements HotelServiceInterface
         private readonly HotelRepositoryInterface $hotelRepository
     ) {}
 
-    public function create(StoreHotelData $data): Hotel
-    {
+    public function create(StoreHotelData $data): Hotel{
         $user = auth()->user();
 
         $this->ensureOwnerDoesNotHaveHotel($user->id);

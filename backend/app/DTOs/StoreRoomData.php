@@ -7,7 +7,6 @@ use App\Http\Requests\StoreRoomRequest;
 class StoreRoomData
 {
     public function __construct(
-        public readonly int $hotelId,
 
         public readonly string $roomNumber,
 
@@ -53,8 +52,6 @@ class StoreRoomData
     ): self {
 
         return new self(
-
-            hotelId: $request->integer('hotel_id'),
 
             roomNumber: $request->string('room_number')->toString(),
 

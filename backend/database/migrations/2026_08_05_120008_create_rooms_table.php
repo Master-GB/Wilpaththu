@@ -1,11 +1,19 @@
 <?php
 
+use App\Enums\BedTypeEnum;
+use App\Enums\RoomTypeEnum;
+use App\Enums\RoomStatusEnum;
 use Illuminate\Database\Migrations\Migration;
+use App\Enums\BathroomTypeEnum;
 use Illuminate\Database\Schema\Blueprint;
+use App\Enums\RoomSizeUnitEnum;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('rooms', function (Blueprint $table) {
@@ -13,7 +21,8 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('hotel_id')
-                ->constrained()
+                ->constrained('hotels')
+                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
             $table->string('room_number');
@@ -23,15 +32,10 @@ return new class extends Migration
             $table->text('description')
                 ->nullable();
 
-            $table->enum('room_type', [
-                'Single',
-                'Double',
-                'Twin',
-                'Triple',
-                'Family',
-                'Suite',
-                'Dormitory',
-            ]);
+            $table->enum(
+                'room_type',
+                RoomTypeEnum::values()
+            );
 
             $table->unsignedInteger('floor_number')
                 ->default(1);
@@ -43,32 +47,28 @@ return new class extends Migration
 
             $table->unsignedTinyInteger('max_occupancy');
 
-            $table->enum('bed_type', [
-                'Single',
-                'Double',
-                'Queen',
-                'King',
-                'Bunk',
-                'Sofa Bed',
-            ]);
+            $table->enum(
+                'bed_type',
+                BedTypeEnum::values()
+            );
 
             $table->unsignedTinyInteger('bed_count');
 
             $table->decimal('room_size', 8, 2)
                 ->nullable();
 
-            $table->enum('room_size_unit', [
-                'sqm',
-                'sqft',
-            ])->default('sqm');
+            $table->enum(
+                'room_size_unit',
+                RoomSizeUnitEnum::values()
+            )->default(RoomSizeUnitEnum::SQM->value);
 
             $table->json('view_types')
                 ->nullable();
 
-            $table->enum('bathroom_type', [
-                'Private',
-                'Shared',
-            ])->default('Private');
+            $table->enum(
+                'bathroom_type',
+                BathroomTypeEnum::values()
+            )->default(BathroomTypeEnum::PRIVATE->value);
 
             $table->boolean('smoking_allowed')
                 ->default(false);
@@ -82,11 +82,10 @@ return new class extends Migration
             $table->json('amenities')
                 ->nullable();
 
-            $table->enum('status', [
-                'Active',
-                'Inactive',
-                'Maintenance',
-            ])->default('Active');
+            $table->enum(
+                'status',
+                RoomStatusEnum::values()
+            )->default(RoomStatusEnum::ACTIVE->value);
 
             $table->timestamps();
 

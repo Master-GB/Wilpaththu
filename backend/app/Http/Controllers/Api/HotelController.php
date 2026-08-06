@@ -101,8 +101,7 @@ class HotelController extends BaseApiController
         );
     }
 
-    public function getMyHotel(): JsonResponse
-    {
+    public function getMyHotel(): JsonResponse{
         $hotel = $this->hotelService
             ->findByOwner(auth()->id());
 
@@ -122,8 +121,8 @@ class HotelController extends BaseApiController
         );
     }
 
-    public function showBySlug(string $slug): JsonResponse
-    {
+    public function showBySlug(string $slug): JsonResponse{
+        
            $hotel = $this->hotelService->findBySlug($slug);
 
             if (!$hotel) {
