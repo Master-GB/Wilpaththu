@@ -12,10 +12,11 @@ interface RoomRepositoryInterface
 
     public function getHotelRooms(int $hotelId);
 
-    public function findRoomByNumber(
+    public function roomNumberExists(
         int $hotelId,
-        string $roomNumber
-    ): ?Room;
+        string $roomNumber,
+        ?int $ignoreRoomId = null
+    ): bool;
 
     public function update(
         Room $room,

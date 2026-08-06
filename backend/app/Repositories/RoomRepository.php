@@ -26,16 +26,19 @@ class RoomRepository implements RoomRepositoryInterface
             ->get();
     }
 
-    public function findRoomByNumber(
-        int $hotelId,
-        string $roomNumber
-    ): ?Room {
+    public function roomNumberExists(int $hotelId,string $roomNumber,?int $ignoreRoomId = null): bool {
 
-        return Room::where('hotel_id', $hotelId)
-            ->where('room_number', $roomNumber)
-            ->first();
+        $query = Room::where('hotel_id', $hotelId)
+        ->where('room_number', $roomNumber);
+
+        if ($ignoreRoomId) {
+            $query->where('id', '!=', $ignoreRoomId);
+        }
+
+        return $query->exists();
     }
 
+    
     public function update(
         Room $room,
         array $data

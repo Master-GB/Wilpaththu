@@ -34,6 +34,11 @@ use App\Services\HotelService;
 use App\Contracts\Services\HotelServiceInterface;
 use App\Models\Hotel;
 use App\Policies\HotelPolicy;
+use App\Services\RoomService;
+use App\Repositories\RoomRepository;
+use App\Contracts\Services\RoomServiceInterface;
+use App\Contracts\Repositories\RoomRepositoryInterface;
+use App\Models\Room;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -87,6 +92,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             HotelServiceInterface::class,
             HotelService::class
+        );
+
+        $this->app->bind(
+            RoomRepositoryInterface::class,
+            RoomRepository::class
+        );
+
+        $this->app->bind(
+            RoomServiceInterface::class,
+            RoomService::class
         );
     }
 

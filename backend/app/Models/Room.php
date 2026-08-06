@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\RoomTypeEnum;
+use App\Enums\BedTypeEnum;
+use App\Enums\RoomStatusEnum;
+use App\Enums\BathroomTypeEnum;
+use App\Enums\RoomSizeUnitEnum;
 
 class Room extends Model
 {
@@ -57,6 +62,16 @@ class Room extends Model
     protected function casts(): array
     {
         return [
+
+            'room_type' => RoomTypeEnum::class,
+
+            'bed_type' => BedTypeEnum::class,
+
+            'bathroom_type' => BathroomTypeEnum::class,
+
+            'room_size_unit' => RoomSizeUnitEnum::class,
+
+            'status' => RoomStatusEnum::class,
 
             'view_types' => 'array',
 
