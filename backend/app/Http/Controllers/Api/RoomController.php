@@ -39,7 +39,8 @@ class RoomController extends Controller
      * Get authenticated hotel owner's rooms.
      */
     public function getMyHotelRooms(): JsonResponse{
-        $this->authorize('view', Room::class);
+        // Use viewAny because the policy's view method expects a Room instance
+        $this->authorize('viewAny', Room::class);
 
         $rooms = $this->roomService->getMyHotelRooms();
 
@@ -152,7 +153,7 @@ class RoomController extends Controller
  * Get available rooms.
  */
     public function getAvailableRooms(): JsonResponse{
-        $this->authorize('view', Room::class);
+        $this->authorize('viewAny', Room::class);
 
         $rooms = $this->roomService->getAvailableRooms();
 

@@ -95,7 +95,7 @@ class RoomService implements RoomServiceInterface
 
             'amenities' => $data->amenities,
 
-            'status' => $data->status,
+            'status' => $data->status ?? \App\Enums\RoomStatusEnum::ACTIVE->value,
         ]);
     }
 
@@ -111,6 +111,14 @@ class RoomService implements RoomServiceInterface
      */
     public function getMyHotelRooms(){
         $hotel = $this->getOwnerHotel();
+
+        // Ensure the authenticated user owns the hotel or is an admin
+        if ($hotel->user_id !== auth()->id() && !auth()->user()?->hasRole('Admin')) {
+            throw new HttpException(
+                403,
+                'You do not have permission to view rooms of this hotel.'
+            );
+        }
 
         return $this->roomRepository->getHotelRooms(
             $hotel->id
@@ -184,11 +192,20 @@ class RoomService implements RoomServiceInterface
         /**
      * Update room status.
      */
-    public function updateStatus(Room $room,string $status): Room {
+    public function updateStatus(Room $room, UpdateRoomStatusData $data): Room {
+        // Ensure the authenticated user owns the hotel or is an admin
+        $hotel = $this->getOwnerHotel();
+
+        if ($room->hotel_id !== $hotel->id && !auth()->user()?->hasRole('Admin')) {
+            throw new HttpException(
+                403,
+                'You do not have permission to update status of this room.'
+            );
+        }
 
         return $this->roomRepository->updateStatus(
             $room,
-            $status
+            $data->status
         );
     }
 

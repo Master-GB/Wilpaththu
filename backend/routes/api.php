@@ -130,20 +130,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('rooms',[RoomController::class, 'index']);
 
-    Route::get('rooms/{room}', [RoomController::class, 'show']);
-
-    Route::post('rooms', [RoomController::class, 'store']);
-
-    Route::put('rooms/{room}', [RoomController::class, 'update']);
-
-    Route::delete('rooms/{room}', [RoomController::class, 'destroy']);
-
     Route::get('rooms/my-hotel',[RoomController::class, 'getMyHotelRooms']);
 
     Route::get('rooms/available',[RoomController::class, 'getAvailableRooms']);
 
-    Route::patch('rooms/{room}/status',[RoomController::class, 'updateStatus']);
+    Route::get('rooms/{room}', [RoomController::class, 'show'])->where('room', '[0-9]+');
 
-    Route::patch('rooms/{id}/restore',[RoomController::class, 'restore']);
+    Route::post('rooms', [RoomController::class, 'store']);
+
+    Route::put('rooms/{room}', [RoomController::class, 'update'])->where('room', '[0-9]+');
+
+    Route::delete('rooms/{room}', [RoomController::class, 'destroy'])->where('room', '[0-9]+');
+
+    Route::patch('rooms/{room}/status',[RoomController::class, 'updateStatus'])->where('room', '[0-9]+');
+
+    Route::patch('rooms/{id}/restore',[RoomController::class, 'restore'])->where('id', '[0-9]+');
 
 });

@@ -11,6 +11,7 @@ enum RoomTypeEnum: string
     case FAMILY = 'Family';
     case SUITE = 'Suite';
     case DORMITORY = 'Dormitory';
+    case DELUXE = 'Deluxe';
 
     public static function values(): array
     {

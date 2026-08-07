@@ -14,7 +14,7 @@ class RoomPolicy
     public function viewAny(User $user): Response
     {
         // Only admins can list rooms
-        if ($user->hasRole('Admin')) {
+        if ($user->hasRole('Admin') || $user->hasRole('Hotel Owner')) {
             return Response::allow();
         }
         return Response::deny('You do not have permission to view rooms.');

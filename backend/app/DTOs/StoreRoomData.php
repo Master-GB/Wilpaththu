@@ -44,7 +44,7 @@ class StoreRoomData
 
         public readonly ?array $amenities,
 
-        public readonly string $status,
+        public readonly ?string $status = null,
     ) {}
 
     public static function fromRequest(
@@ -91,7 +91,7 @@ class StoreRoomData
 
             amenities: $request->input('amenities'),
 
-            status: $request->string('status')->toString(),
+            status: $request->filled('status') ? $request->string('status')->toString() : null,
         );
     }
 }

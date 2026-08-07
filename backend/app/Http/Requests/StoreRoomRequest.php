@@ -139,6 +139,7 @@ class StoreRoomRequest extends FormRequest
 
             'status' => [
                 'sometimes',
+                'nullable',
                 Rule::enum(RoomStatusEnum::class),
             ],
         ];
