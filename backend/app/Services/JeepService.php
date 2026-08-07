@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;  
 use App\Contracts\Repositories\BusinessRepositoryInterface;
 use App\Contracts\Repositories\JeepRepositoryInterface;
 use App\Contracts\Services\JeepServiceInterface;
@@ -44,7 +45,7 @@ class JeepService extends BaseService implements JeepServiceInterface
             ]);
         }
 
-        if ($business->owner_id !== auth()->id()) {
+        if ($business->owner_id !== auth()->id() && !auth()->user()?->hasRole('Admin')) {
             throw new HttpException(
                 403,
                 'You do not own this business.'

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\JeepController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\HotelController;
+use App\Http\Controllers\Api\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -121,5 +122,28 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('hotels/{hotel}/featured-type',[HotelController::class, 'updateFeaturedType']);
 
     Route::patch('hotels/{id}/restore',[HotelController::class, 'restore']);
+
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('rooms',[RoomController::class, 'index']);
+
+    Route::get('rooms/{room}', [RoomController::class, 'show']);
+
+    Route::post('rooms', [RoomController::class, 'store']);
+
+    Route::put('rooms/{room}', [RoomController::class, 'update']);
+
+    Route::delete('rooms/{room}', [RoomController::class, 'destroy']);
+
+    Route::get('rooms/my-hotel',[RoomController::class, 'getMyHotelRooms']);
+
+    Route::get('rooms/available',[RoomController::class, 'getAvailableRooms']);
+
+    Route::patch('rooms/{room}/status',[RoomController::class, 'updateStatus']);
+
+    Route::patch('rooms/{id}/restore',[RoomController::class, 'restore']);
 
 });

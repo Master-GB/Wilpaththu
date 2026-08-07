@@ -85,4 +85,8 @@ class RoomRepository implements RoomRepositoryInterface
             ->get();
     }
 
+    public function getAll()
+    {
+        return Room::latest()->get();
+    }
 }

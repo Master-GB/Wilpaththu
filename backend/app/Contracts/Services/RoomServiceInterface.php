@@ -24,4 +24,6 @@ interface RoomServiceInterface
     public function restore(int $id): Room;
 
     public function getAvailableRooms();
+
+    public function getAll();
 }

@@ -33,4 +33,6 @@ interface RoomRepositoryInterface
     public function restore(int $id): Room;
 
     public function getAvailableRooms(int $hotelId);
+
+    public function getAll();
 }

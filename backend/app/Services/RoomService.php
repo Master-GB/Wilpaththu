@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;  
 use App\DTOs\StoreRoomData;
 use App\DTOs\UpdateRoomData;
 use App\Models\Room;
@@ -10,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use App\Contracts\Services\RoomServiceInterface;
 use App\Contracts\Services\HotelServiceInterface;
 use App\Contracts\Repositories\RoomRepositoryInterface;
+use App\DTOs\UpdateRoomStatusData;
 
 class RoomService implements RoomServiceInterface
 {
@@ -18,17 +20,21 @@ class RoomService implements RoomServiceInterface
         private readonly HotelServiceInterface $hotelService,
     ) {}
 
+    public function getAll(){
+        return $this->roomRepository->getAll();
+    }
+
     /**
      * Create a room.
      */
     public function createRoom(StoreRoomData $data): Room{
         $hotel = $this->getOwnerHotel();
 
-         if (!$hotel) {
+        if (!$hotel) {
 
-        throw ValidationException::withMessages([
-            'hotel' => 'Hotel not found.',
-        ]);
+            throw ValidationException::withMessages([
+                'hotel' => 'Hotel not found.',
+            ]);
         }
 
         if ($this->roomRepository->roomNumberExists(
@@ -39,6 +45,13 @@ class RoomService implements RoomServiceInterface
             throw ValidationException::withMessages([
                 'room_number' => 'Room number already exists.',
             ]);
+        }
+
+        if ($hotel->user_id !== auth()->id() && !auth()->user()?->hasRole('Admin')) {
+            throw new HttpException(
+            403,
+            'You do not own this Hotel.'
+            );
         }
 
 
