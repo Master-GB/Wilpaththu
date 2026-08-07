@@ -38,7 +38,7 @@ class RoomRepository implements RoomRepositoryInterface
         return $query->exists();
     }
 
-    
+
     public function update(
         Room $room,
         array $data

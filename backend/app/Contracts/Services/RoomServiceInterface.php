@@ -4,6 +4,7 @@ namespace App\Contracts\Services;
 
 use App\DTOs\StoreRoomData;
 use App\DTOs\UpdateRoomData;
+use App\DTOs\UpdateRoomStatusData;
 use App\Models\Room;
 
 interface RoomServiceInterface
@@ -16,7 +17,7 @@ interface RoomServiceInterface
 
     public function update(Room $room, UpdateRoomData $data): Room;
 
-    public function updateStatus(Room $room, string $status): Room;
+    public function updateStatus(Room $room, UpdateRoomStatusData $data): Room;
 
     public function delete(Room $room): void;
 

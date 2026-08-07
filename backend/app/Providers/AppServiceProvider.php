@@ -38,6 +38,7 @@ use App\Services\RoomService;
 use App\Repositories\RoomRepository;
 use App\Contracts\Services\RoomServiceInterface;
 use App\Contracts\Repositories\RoomRepositoryInterface;
+use App\Policies\RoomPolicy;
 use App\Models\Room;
 
 class AppServiceProvider extends ServiceProvider
@@ -116,6 +117,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Vehicle::class, VehiclePolicy::class);
 
         Gate::policy(Hotel::class,HotelPolicy::class);
+
+        Gate::policy(Room::class,RoomPolicy::class);
 
     }
 }
